@@ -1,3 +1,8 @@
+/*
+ * @Date: 2020-02-29 16:14:27
+ * @LastEditors: BeckoninGshy
+ * @LastEditTime: 2020-02-29 18:41:16
+ */
 import originJsonp from 'jsonp'
 
 export default function jsonp(url, data, option) {
@@ -14,11 +19,11 @@ export default function jsonp(url, data, option) {
   })
 }
 
-export function param(data) {
+function param (data) {
   let url = ''
   for (var k in data) {
     let value = data[k] !== undefined ? data[k] : ''
-    url += '&' + k + '=' + encodeURIComponent(value)
+    url += `&${k}=${encodeURIComponent(value)}`
   }
   return url ? url.substring(1) : ''
 }
