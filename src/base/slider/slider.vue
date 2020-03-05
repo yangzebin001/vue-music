@@ -1,7 +1,7 @@
 <!--
  * @Date: 2020-03-01 23:16:46
  * @LastEditors: BeckoninGshy
- * @LastEditTime: 2020-03-02 00:04:08
+ * @LastEditTime: 2020-03-05 22:03:17
  -->
 <template>
   <div class="slider" ref="slider">
@@ -10,6 +10,11 @@
       </slot>
     </div>
     <div class="dots">
+      <span class="dot"
+      v-for="(it,index) in dots"
+      :key="index"
+      :class="{'active' : index === currentPageIndex}"
+      ></span>
     </div>
   </div>
 </template>
@@ -19,6 +24,12 @@ import BScroll from 'better-scroll'
 import {addClass} from 'common/js/dom'
 export default {
   name: 'Slider',
+  data () {
+    return {
+      dots: [],
+      currentPageIndex: 0
+    }
+  },
   props: {
     loop: {
       type: Boolean,
@@ -30,17 +41,28 @@ export default {
     },
     interval: {
       tyep: Number,
-      default: 4000
+      default: 3000
     }
   },
   mounted () {
     setTimeout(() => {
       this._setSliderWidth()
+      this._initDots()
       this._initSlider()
+
+      if (this.autoplay) {
+        this._play()
+      }
     }, 20)
+
+    window.addEventListener('resize', () => {
+      if (!this.slider) return
+      this._setSliderWidth(true)
+      this.slider.refresh()
+    })
   },
   methods: {
-    _setSliderWidth () {
+    _setSliderWidth (isResize) {
       this.children = this.$refs.sliderGroup.children
 
       let width = 0
@@ -53,9 +75,10 @@ export default {
         width += sliderWidth
       }
 
-      if (this.loop) {
+      if (this.loop && !isResize) {
         width += 2 * sliderWidth
       }
+
       this.$refs.sliderGroup.style.width = width + 'px'
     },
     _initSlider () {
@@ -63,12 +86,34 @@ export default {
         scrollX: true,
         scrollY: false,
         momentum: false,
-        snap: true,
-        snapLoop: this.loop,
-        snapThreshold: 0.3,
-        snapSpeed: 400,
-        click: true
+        snap: {
+          loop: this.loop,
+          speed: 400,
+          threshold: 100
+        }
       })
+
+      this.slider.on('scrollEnd', () => {
+        let pageIndex = this.slider.getCurrentPage().pageX
+
+        this.currentPageIndex = pageIndex
+
+        if (this.autoplay) {
+          clearTimeout(this.timer)
+          this._play()
+        }
+      })
+    },
+    _initDots () {
+      this.dots = new Array(this.children.length)
+    },
+    _play () {
+      let totalPage = this.children.length - 2
+      let pageIndex = (this.currentPageIndex + 1) % totalPage
+
+      this.timer = setTimeout(() => {
+        this.slider.goToPage(pageIndex)
+      }, this.interval)
     }
   }
 }
@@ -98,7 +143,7 @@ export default {
       position absolute
       right 0
       left 0
-      buttom 12px
+      bottom 12px
       text-align center
       font-size 0
       .dot
@@ -106,7 +151,7 @@ export default {
         margin 0 4px
         width 8px
         height 8px
-        border-redius 50%
+        border-radius 50%
         background $color-text-l
         &.active
           width 20px

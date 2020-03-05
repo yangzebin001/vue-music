@@ -1,7 +1,7 @@
 <!--
  * @Date: 2020-02-29 17:43:15
  * @LastEditors: BeckoninGshy
- * @LastEditTime: 2020-03-01 23:56:47
+ * @LastEditTime: 2020-03-05 22:04:08
  -->
 <template>
   <div class="recommend">
@@ -9,7 +9,7 @@
       <div v-if="recommends.length" class="slider-wrapper">
         <slider>
           <div v-for="(item,index) in recommends" :key="index">
-            <a :href="item.linUrl">
+            <a :href="item.linkUrl">
               <img :src="item.picUrl" />
             </a>
           </div>
