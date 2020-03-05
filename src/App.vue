@@ -1,8 +1,16 @@
+<!--
+ * @Date: 2020-02-29 12:57:14
+ * @LastEditors: BeckoninGshy
+ * @LastEditTime: 2020-03-05 22:10:56
+ -->
 <template>
   <div id="app">
     <m-header></m-header>
     <tab></tab>
-    <router-view></router-view>
+    <keep-alive>
+      <router-view>
+      </router-view>
+    </keep-alive>
   </div>
 </template>
 

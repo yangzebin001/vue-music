@@ -1,7 +1,7 @@
 <!--
  * @Date: 2020-03-01 23:16:46
  * @LastEditors: BeckoninGshy
- * @LastEditTime: 2020-03-05 22:03:17
+ * @LastEditTime: 2020-03-05 22:11:11
  -->
 <template>
   <div class="slider" ref="slider">
@@ -60,6 +60,10 @@ export default {
       this._setSliderWidth(true)
       this.slider.refresh()
     })
+  },
+  beforeDestroy() {
+    clearTimeout(this.timer)
+    window.releaseEvents('resize')
   },
   methods: {
     _setSliderWidth (isResize) {

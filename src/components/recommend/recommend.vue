@@ -1,7 +1,7 @@
 <!--
  * @Date: 2020-02-29 17:43:15
  * @LastEditors: BeckoninGshy
- * @LastEditTime: 2020-03-05 22:04:08
+ * @LastEditTime: 2020-03-05 23:03:10
  -->
 <template>
   <div class="recommend">
@@ -25,24 +25,33 @@
 </template>
 
 <script>
-import {getRecommend} from 'api/recommend'
+import {getRecommend, getDiscList} from 'api/recommend'
 import {ERR_OK} from 'api/config'
 import Slider from 'base/slider/slider'
 export default {
   name: 'Recommend',
   data () {
     return {
-      recommends: []
+      recommends: [],
+      discList: []
     }
   },
   created () {
     this._getRecommend()
+    this._getDiscList()
   },
   methods: {
     _getRecommend () {
       getRecommend().then((res) => {
         if (res.code === ERR_OK) {
           this.recommends = res.data.slider
+        }
+      })
+    },
+    _getDiscList () {
+      getDiscList().then((res) => {
+        if (res.code === ERR_OK) {
+          this.discList = res.data.list
         }
       })
     }
