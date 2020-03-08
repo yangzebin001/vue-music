@@ -52,7 +52,6 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     before(app) {
       app.get('/getDiscList', function (req, res) {
         var url = 'https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg'
-        console.log(111,url)
         axios.get(url, {
           headers: {
             referer: 'https://c.y.qq.com/',

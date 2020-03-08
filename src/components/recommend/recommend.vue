@@ -1,26 +1,54 @@
 <!--
  * @Date: 2020-02-29 17:43:15
  * @LastEditors: BeckoninGshy
- * @LastEditTime: 2020-03-05 23:03:10
+ * @LastEditTime: 2020-03-08 21:09:15
  -->
 <template>
   <div class="recommend">
-    <div class="recommend-content">
-      <div v-if="recommends.length" class="slider-wrapper">
-        <slider>
-          <div v-for="(item,index) in recommends" :key="index">
-            <a :href="item.linkUrl">
-              <img :src="item.picUrl" />
-            </a>
-          </div>
-        </slider>
+    <scroll
+    class="recommend-content"
+    :data="discList"
+    ref="scroll"
+    >
+      <div>
+        <div v-if="recommends.length" class="slider-wrapper">
+          <slider>
+            <div v-for="(item,index) in recommends" :key="index">
+              <a :href="item.linkUrl">
+                <img
+                class="needsclick"
+                :src="item.picUrl"
+                @load="loadImage"
+                />
+              </a>
+            </div>
+          </slider>
+        </div>
+        <div class="recomment-list">
+          <h1 class="list-title">热门歌曲推荐</h1>
+          <ul>
+            <li
+            class="item"
+            v-for="(item,index) in discList"
+            :key="index"
+            >
+              <div class="icon">
+                <img width="60" height="60" v-lazy="item.imgurl">
+              </div>
+              <div class="text">
+                <h2 class="name" v-html="item.creator.name"></h2>
+                <p class="desc" v-html="item.creator.desc"></p>
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
-      <div class="recomment-list">
-        <h1 class="list-title">热门歌曲推荐</h1>
-        <ul>
-        </ul>
+      <div class="loading-container"
+        v-show="!discList.length"
+      >
+        <loading></loading>
       </div>
-    </div>
+    </scroll>
   </div>
 </template>
 
@@ -28,6 +56,8 @@
 import {getRecommend, getDiscList} from 'api/recommend'
 import {ERR_OK} from 'api/config'
 import Slider from 'base/slider/slider'
+import Scroll from 'base/scroll/scroll'
+import Loading from 'base/loading/loading'
 export default {
   name: 'Recommend',
   data () {
@@ -54,10 +84,18 @@ export default {
           this.discList = res.data.list
         }
       })
+    },
+    loadImage () {
+      if (!this.checkLoaded) {
+        this.$refs.scroll.refresh()
+        this.checkLoaded = true
+      }
     }
   },
   components: {
-    Slider
+    Slider,
+    Scroll,
+    Loading
   }
 }
 </script>
@@ -66,7 +104,7 @@ export default {
   .recommend
     position fixed
     width 100%
-    top 80px
+    top 100px
     bottom 0
     .recommend-content
       height 100%
