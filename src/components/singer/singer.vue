@@ -1,11 +1,12 @@
 <!--
  * @Date: 2020-02-29 17:43:32
  * @LastEditors: BeckoninGshy
- * @LastEditTime: 2020-03-10 21:05:04
+ * @LastEditTime: 2020-03-10 22:03:34
  -->
 <template>
   <div class="singer">
-    歌手页面
+    <list-view :data="singers">
+    </list-view>
   </div>
 </template>
 
@@ -14,6 +15,8 @@ import {getSingerList} from 'api/singer'
 import {ERR_OK} from 'api/config'
 import Singer from 'common/js/singer'
 
+import ListView from 'base/listview/listview'
+
 const HOT_NAME = '热门'
 const HOT_SINGER_LEN = 10
 
@@ -21,7 +24,7 @@ export default {
   name: 'Singer',
   data() {
     return {
-      singer: []
+      singers: []
     }
   },
   created() {
@@ -31,7 +34,7 @@ export default {
     _getSingerList() {
       getSingerList().then((res) => {
         if (res.code === ERR_OK) {
-          this.singer = res.data.list
+          this.singers = this._normalizeSinger(res.data.list)
         }
       })
     },
@@ -78,14 +81,15 @@ export default {
       return hot.concat(ret)
     }
   },
-  watch: {
-    singer() {
-      let arr = this._normalizeSinger(this.singer)
-      console.log(arr)
-    }
+  components: {
+    ListView
   }
 }
 </script>
 <style lang="stylus" scoped>
-
+  .singer
+    position: fixed
+    top: 88px
+    bottom: 0
+    width: 100%
 </style>
