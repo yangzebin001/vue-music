@@ -1,7 +1,7 @@
 <!--
  * @Date: 2020-03-08 20:21:25
  * @LastEditors: BeckoninGshy
- * @LastEditTime: 2020-03-10 22:00:06
+ * @LastEditTime: 2020-03-11 18:15:04
  -->
 <template>
   <div ref="wrapper">
@@ -13,7 +13,7 @@
 import BScroll from 'better-scroll'
 export default {
   props: {
-    porbeType: {
+    probeType: {
       type: Number,
       default: 1
     },
@@ -24,6 +24,10 @@ export default {
     data: {
       type: Array,
       default: null
+    },
+    listenScroll: {
+      type: Boolean,
+      default: false
     }
   },
   mounted() {
@@ -37,9 +41,16 @@ export default {
         return
       }
       this.scroll = new BScroll(this.$refs.wrapper, {
-        porbeType: this.porbeType,
+        probeType: this.probeType,
         click: this.click
       })
+
+      if (this.listenScroll) {
+        let me = this
+        this.scroll.on('scroll', (pos) => {
+          me.$emit('scroll', pos)
+        })
+      }
     },
     enable() {
       this.scroll && this.scroll.enable()
@@ -49,6 +60,12 @@ export default {
     },
     refresh() {
       this.scroll && this.scroll.refresh()
+    },
+    scrollTo() {
+      this.scroll && this.scroll.scrollTo.apply(this.scroll, arguments)
+    },
+    scrollToElement() {
+      this.scroll && this.scroll.scrollToElement.apply(this.scroll, arguments)
     }
   },
   watch: {
