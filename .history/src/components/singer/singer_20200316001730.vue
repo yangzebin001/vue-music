@@ -1,14 +1,14 @@
 <!--
  * @Date: 2020-02-29 17:43:32
  * @LastEditors: BeckoninGshy
- * @LastEditTime: 2020-03-16 00:24:28
+ * @LastEditTime: 2020-03-16 00:17:30
  -->
 <template>
   <div class="singer">
     <list-view :data="singers">
     </list-view>
-    <div class="loading-container" v-show="!singers.length">
-      <loading></loading>
+    <div>
+      
     </div>
   </div>
 </template>
@@ -17,7 +17,7 @@
 import {getSingerList} from 'api/singer'
 import {ERR_OK} from 'api/config'
 import Singer from 'common/js/singer'
-import Loading from 'base/loading/loading'
+import loading from 'base/loading/loading'
 
 import ListView from 'base/listview/listview'
 
@@ -86,8 +86,7 @@ export default {
     }
   },
   components: {
-    ListView,
-    Loading
+    ListView
   }
 }
 </script>
@@ -97,9 +96,4 @@ export default {
     top: 88px
     bottom: 0
     width: 100%
-  .loading-container
-      position absolute
-      width 100%
-      top 50%
-      transform translateY(-50%)
 </style>

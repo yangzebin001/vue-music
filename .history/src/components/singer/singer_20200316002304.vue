@@ -1,13 +1,13 @@
 <!--
  * @Date: 2020-02-29 17:43:32
  * @LastEditors: BeckoninGshy
- * @LastEditTime: 2020-03-16 00:24:28
+ * @LastEditTime: 2020-03-16 00:23:01
  -->
 <template>
   <div class="singer">
     <list-view :data="singers">
     </list-view>
-    <div class="loading-container" v-show="!singers.length">
+    <div v-if="!singers.lenth">
       <loading></loading>
     </div>
   </div>
@@ -36,11 +36,14 @@ export default {
   },
   methods: {
     _getSingerList() {
-      getSingerList().then((res) => {
-        if (res.code === ERR_OK) {
-          this.singers = this._normalizeSinger(res.data.list)
-        }
-      })
+      setTimeout(() => {
+        getSingerList().then((res) => {
+          if (res.code === ERR_OK) {
+            this.singers = this._normalizeSinger(res.data.list)
+          }
+        })
+
+      }, 2000)
     },
     _normalizeSinger(list) {
       let map = {
