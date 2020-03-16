@@ -1,7 +1,7 @@
 <!--
  * @Date: 2020-03-10 21:10:37
  * @LastEditors: BeckoninGshy
- * @LastEditTime: 2020-03-11 18:52:34
+ * @LastEditTime: 2020-03-16 00:35:01
  -->
 <template>
   <scroll class="listview"
@@ -21,6 +21,7 @@
             v-for="(item,index) in group.items"
             :key="index"
             class="list-group-item"
+            @click="selectItem(item)"
           >
             <img class="avatar"
               v-lazy="item.avatar"
@@ -99,6 +100,9 @@ export default {
     }
   },
   methods: {
+    selectItem(item) {
+      this.$emit('select', item)
+    },
     _scrollTo(anchorIndex) {
       if (!anchorIndex && anchorIndex !== 0) {
         return

@@ -1,12 +1,15 @@
 <!--
  * @Date: 2020-02-29 17:43:32
  * @LastEditors: BeckoninGshy
- * @LastEditTime: 2020-03-16 00:24:28
+ * @LastEditTime: 2020-03-16 22:30:53
  -->
 <template>
   <div class="singer">
-    <list-view :data="singers">
+    <list-view :data="singers" @select="selectSinger">
     </list-view>
+    <transition name="slide" mode="out-in">
+      <router-view></router-view>
+    </transition>
     <div class="loading-container" v-show="!singers.length">
       <loading></loading>
     </div>
@@ -35,6 +38,11 @@ export default {
     this._getSingerList()
   },
   methods: {
+    selectSinger(singer) {
+      this.$router.push({
+        path: `/singer/${singer.id}`
+      })
+    },
     _getSingerList() {
       getSingerList().then((res) => {
         if (res.code === ERR_OK) {
@@ -102,4 +110,8 @@ export default {
       width 100%
       top 50%
       transform translateY(-50%)
+  .slide-enter-active, .slide-leave-active
+    transition all 0.25s
+  .slide-enter, .slide-leave-to
+    transform translate3d(100%, 0, 0)
 </style>
